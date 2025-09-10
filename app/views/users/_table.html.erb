@@ -1,0 +1,26 @@
+<!-- app/views/users/_table.html.erb -->
+<table>
+  <thead>
+    <tr>
+      <% columns.each do |col| %>
+        <th scope="col" data-column-order-target="header" data-col="<%= col %>"><%= col.titleize %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.each do |u| %>
+      <tr>
+        <% columns.each do |col| %>
+          <td>
+            <% case col
+               when "name"    then %><%= u.name %>
+               <% when "email" then %><%= u.email %>
+               <% when "phone" then %><%= u.phone %>
+               <% when "country" then %><%= u.country %>
+               <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,38 @@
+<!-- app/views/users/index.html.erb -->
+<div class="card">
+  <div class="row" style="justify-content: space-between;">
+    <h1 style="margin: 0 0 4px 0;">Users</h1>
+  </div>
+
+  <!-- GET form targets the turbo-frame to re-render just the table -->
+  <%= form_with url: users_path, method: :get, data: { turbo_frame: "users_table" } do %>
+    <div class="row" style="margin-top: 12px; margin-bottom: 8px;">
+      <input
+        type="search"
+        name="q"
+        value="<%= h @q %>"
+        placeholder="Search by name or email…"
+        data-controller="search"
+        data-search-delay-value="250"
+        data-action="input->search#input" />
+
+      <!-- Hidden field carrying the current column order is managed by the column-order controller -->
+
+      <!-- (Optional) a subtle Reset -->
+      <% if @q.present? || @columns != UsersController::DEFAULT_COLUMNS %>
+        <%= link_to "Reset", users_path, class: "muted" %>
+      <% end %>
+    </div>
+
+    <!-- The header row is the drag-drop surface -->
+    <div data-controller="column-order">
+      <%= turbo_frame_tag "users_table" do %>
+        <%= render partial: "users/table", locals: { users: @users, columns: @columns } %>
+        <div class="row" style="justify-content:center; margin-top: 12px;">
+          <%= pagy_nav(@pagy).html_safe if @pagy %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>
